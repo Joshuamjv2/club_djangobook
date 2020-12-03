@@ -1,0 +1,59 @@
+{% load static %}
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>
+      {% block title %}
+      {{ page_title|default:"Untitled Page" }}
+      {% endblock title %}
+    </title>
+    <link href="{% static 'main.css' %}" rel="stylesheet" type="text/css">
+    {% block styles %}{% endblock styles %}
+  </head>
+  <body>
+    <div id="wrapper">
+    <header id="header">
+      <div id="logo"><img src="{% static 'logo.png' %}" alt="" /></div>
+      <div id="top_menu">
+        Home | Calendar | About |
+        <a href="/contact">Contact Us</a> |
+        {% if user.is_authenticated %}
+          Hello, {{user.username}}
+          <a href="{% url 'logout' %}?next/=">Log out</a>
+          {% else %}
+          Not logged in.
+          <a href="{% url 'login'%}?next/=">Log in</a>
+        {% endif %}
+      </div>
+      <div id="topbanner"><img src="{% static 'top_banner.jpg' %}" alt="" /></div>
+    </header>
+
+    {% if user.is_authenticated %}
+    <aside id="rightsidebar">
+      <nav id="nav">
+      <ul>
+        <li><a href="/add_venue">Add Your Venue</a></li>
+        <li><a href="/events/">Manage Events</a></li>
+        <li>My Profile</li>
+        <li>Menu 1</li>
+        <li>Menu 2</li>
+        <li>Menu 3</li>
+      </ul>
+      </nav>
+    </aside>
+    {% endif %}
+
+    <section id="main">
+      {% block content %}
+      <p>Placeholder text in base template. Replace with page content.</p>
+      {% endblock content %}
+    </section>
+    <footer id="footer">Copyright &copy;
+      <script type="text/JavaScript">
+      document.write(new Date().getFullYear());
+      </script> MyClub
+    </footer>
+    </div>
+  </body>
+</html>

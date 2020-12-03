@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+    ListView Demo
+{% endblock title %}
+
+
+{% block content %}
+    <h1>All events</h1>
+    <ul>
+        {% for event in all_events %}
+            <li><a href="/event/{{event.id}}">{{event.name}}</a></li>
+        {% endfor %}
+    </ul>
+    <p><a href="/event/add">Add Event</a></p>
+{% endblock content %}

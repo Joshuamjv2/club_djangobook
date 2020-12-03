@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+    ArchiveIndexView Demo
+{% endblock title %}
+
+
+{% block content %}
+    <h1>Event Index</h1>
+    <ul>
+        {% for event in latest %}
+            <li>{{event.event_date}}: {{event.name}}</li>
+        {% endfor %}
+    </ul>
+{% endblock content %}

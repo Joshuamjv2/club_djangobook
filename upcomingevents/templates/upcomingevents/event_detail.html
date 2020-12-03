@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+    DetailView Demo
+{% endblock title %}
+
+{% block content %}
+    <h1>Event: {{event.name}}</h1>
+    <table>
+        <tr>
+            <td><strong>Event Data:</strong></td><td>{{event.event_date}}</td>
+        </tr>
+        <tr>
+            <td><strong>Venue:</strong></td><td>{{event.venue}}</td>
+        </tr>
+        <tr>
+            <td><strong>Description:</strong></td><td>{{event.description|safe}}</td>
+        </tr>
+        <tr>
+            <td><a href="/event/update/{{event.id}}">Update</a></td><td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td><a href="/event/delete/{{event.id}}">Delete Event</a></td>
+        </tr>
+    </table>
+{% endblock content %}

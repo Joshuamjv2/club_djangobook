@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us{% endblock title %}
+
+{% block content %}
+<h1>Contact us</h1>
+
+
+{% if messages %}
+  {% for msg in messages %}
+    <p {% if msg.tags %} class="{{msg.tags}}" {% endif %}>{{msg}}</p>
+  {% endfor %}
+{% endif %}
+
+
+{% if submitted %}
+  <p class="success">
+    Your message was submitted successfully. Thank you.
+  </p>
+
+{% else %}
+  <form action="" method="post" novalidate>
+  <table>
+    {{ form.as_table }}
+    <tr>
+      <td>&nbsp;</td>
+      <td><input type="submit" value="Submit"></td>
+    </tr>
+  </table>
+  {% csrf_token %}
+  </form>
+{% endif %}
+{% endblock content %}

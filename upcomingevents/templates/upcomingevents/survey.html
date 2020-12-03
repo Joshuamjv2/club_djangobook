@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Club Survey{% endblock title %}
+
+
+{% block content %}
+    <h1>Please provide some feedback:</h1>
+    {% if messages %}
+        {% for msg in messages %}
+            <p {% if msg.tags %} class="{{msg.tags}}"{% endif %}>{{msg}}</p>
+        {% endfor %}
+    {% endif %}
+    <p>Step {{wizard.steps.step1}} of {{wizard.steps.count}}</p>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <table>
+            {{wizard.management_form}}
+            {% if wizard.form.forms %}
+                {{wizard.management_form}}
+                {% for form in wizard.form.forms %}
+                    {{form}}
+                {% endfor %}
+            {% else %}
+                {{wizard.form}}
+            {% endif %}
+        </table>
+        {% if wizard.steps.next %}
+            <input type="submit" value="Next">
+            {% else %}
+            <input type="submit" value="Submit">
+        {% endif %}
+        {% if wizard.steps.prev %}
+            <button id="submit" name="wizard_goto_step" type="submit" value="{{wizard.steps.prev}}">Back</button>
+        {% endif %}
+    </form>
+{% endblock content %}
+

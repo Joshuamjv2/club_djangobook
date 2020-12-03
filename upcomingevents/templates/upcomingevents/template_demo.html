@@ -1,0 +1,87 @@
+{% load static event_custom_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testing Out the Template System</title>
+    <style>
+        .row {
+            background-color:lightskyblue;
+        }
+        .altrow{
+            background-color: lightgray;
+        }
+        table td{
+            text-align:center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Template Demo File</h1>
+    <h2>Comment tag</h2>
+    <!-- This is a normal HTML comment which shows in your browser -->
+    <!-- {% comment "this won't show at all in your browser source"%}
+        <p>Three six nine, the goose drank wine</p>
+    {% endcomment %}
+
+    {% for i in '12345' %}
+        <p style="color: red;">Colored text</p>
+    {% endfor %}
+
+    <p><strong>Cycle tag used to format a table:</strong></p>
+    <table border=0 style="width: 100px;">
+        
+        {% for i in '12345' %}
+            <tr class="{% cycle 'row' 'altrow' %}">
+                <td>{{i}}</td>
+            </tr>
+            {% resetcycle %}
+        {% endfor %}
+            
+    </table>
+
+    <h2>Filter tag</h2>
+    {% filter striptags|upper %}
+        <p>This text will be converted to uppercase and have the HTML tags <em>removed</em></p>
+    {% endfilter %}
+    <h2>Firstof Tag</h2>
+    {% firstof None False '' empty_list 'Not this one' 'This one'%}
+
+    <h2>The regroup tag</h2>
+    {% regroup best_bands by country as band_list %}
+    <p>Best bands: </p> -->
+    
+    <!-- {% for band in band_list %}
+        <li>
+            {{ band.grouper }}
+            <ul>
+                {% for band in band.list %}
+                    <li>{{ band.name }}</li>
+                {% endfor %}
+            </ul>
+        </li>
+
+    {% endfor %}
+
+    <h2>The url tag</h2>
+    <a href="{% url 'tdemo'%}">go</a>-->
+
+    <!-- <h2>The widthratio tag</h2>
+    <img src="{% static 'top_banner.png' %}" alt="" width="{% widthratio 33 100 200%}">
+    {% widthratio this_value max_value 100 %} -->
+
+<!-- <h2>Json script filter</h2>
+{{best_bands|json_script:"best-bands"}}
+{{venues|json_script:"all-venues"}} -->
+
+{{ "Number of the Beast"|slugify }}
+
+<h2>Custom tags and filters</h2>
+{{'james is in rehab again'|reverse}}
+{{0758438885|reverse}}
+<br>
+{%create_date today%}
+{% announcements %}
+</body>
+</html>

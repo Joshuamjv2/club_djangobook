@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+    My Club Subscribers
+{% endblock title %}
+
+
+{% block content %}
+    <h1>My Club Subscribers</h1>
+    <table border="1" width =100%>
+        <tr style="text-align:center"><th>First Name</th><th>Last Name</th></tr>
+        {% for subscriber in subscribers %}
+            <tr>
+                <td style="padding-top: 10px;">{{subscriber.last_name|upper}}</td>
+                <td style="padding-top: 10px">{{subscriber.first_name}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <div style="padding-top: 20px;">
+        
+        {% if subscribers.has_previous %}
+        <a href="?page=1">&laquo; first</a>
+        <a href="?page={{subscribers.previous_page_number}}">previous</a>
+        {% endif %}
+        Page {{subscribers.number}} of {{subscribers.paginator.num_pages}}
+
+        
+        {% if subscribers.has_next %}
+            <a href="?page={{subscribers.next_page_number}}">next</a>
+            <a href="?page={{subscribers.paginator.num_pages}}">last &raquo;</a>
+        {% endif %}
+            
+    </div>
+{% endblock content %}

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Quick Edit Events{% endblock title %}
+
+{% block content %}
+<h1>Quick Edit Events</h1>
+{% if formset.errors %}
+  <ul>
+  {% for error in formset.errors %}
+    {{ error }}
+  {% endfor %}
+  </ul>
+{% endif %}
+<form action="" method="post" novalidate>
+  {{ formset.management_form }}
+  <table>
+  <tr><th>Event Name</th><th>Event Date</th></tr>
+    {% for form in formset %}
+    <tr>
+      {{ form.id }}
+      <td>{{ form.name }}</td>
+      <td>{{ form.event_date }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% csrf_token %}
+  <input style="width: 100px;" id="submit" type="submit" value="Update">
+</form>
+
+<div style="padding-top: 20px;">
+  {% if event_records.has_previous  %}
+    <a href="?page=1">&laquo; first</a>
+    <a href="?page={{ event_records.previous_page_number }}">previous</a>
+  {% endif %}
+  Page {{ event_records.number }} of {{ event_records.paginator.num_pages }}
+  {% if event_records.has_next %}
+    <a href="?page={{ event_records.next_page_number }}">next</a>
+    <a href="?page={{ event_records.paginator.num_pages }}">last &raquo;</a>
+  {% endif %}
+</div>
+{% endblock content %}

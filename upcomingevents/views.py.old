@@ -1,0 +1,116 @@
+from django.shortcuts import render
+from django.template.response import TemplateResponse
+from django.http import HttpResponse, FileResponse, HttpResponseRedirect
+from datetime import date
+import calendar
+from calendar import HTMLCalendar
+from .models import Event, Venue, MyClubUser
+# from .forms import VenueForm
+from .forms import VenueForm
+import csv
+import io
+from reportlab.pdfgen import canvas
+from reportlab.lib.units import inch
+from reportlab.lib.pagesizes import letter
+#pagination
+from django.core.paginator import Paginator
+
+def gen_pdf(request):
+    buf = io.BytesIO()
+    c = canvas.Canvas(buf, pagesize=letter, bottomup=0)
+    textob = c.beginText()
+    textob.setTextOrigin(inch, inch)
+    textob.setFont("Helvetica-Oblique", 14)
+    lines = [
+        "I will not expose the ignorance of the faculty.",
+        "I will not conduct my own fire drills.",
+        "I will not prescribe medication.",
+    ]
+    for line in lines:
+        textob.textLine(line)
+    c.drawText(textob)
+    c.showPage()
+    c.save()
+    buf.seek(0)
+    return FileResponse(buf, as_attachment=True, filename='bart.pdf')
+
+def gen_text(request):
+    response = HttpResponse(content_type='text/plain')
+    response['Content-Disposition'] = 'attachment; filename="bart.txt"'
+    lines = [
+        "I will not expose the ignorance of the faculty.\n",
+        "I will not conduct my own fire drills.\n",
+        "I will not prescribe medication.\n"
+    ]
+    response.writelines(lines)
+    return response
+
+def gen_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="venues.csv"'
+    writer = csv.writer(response)
+    venues = Venue.venues.all()
+    writer.writerow(['Venue Name', 'Address', 'Email'])
+    for venue in venues:
+        writer.writerow([venue.name, venue.address, venue.phone, venue.email_address])
+    return response
+
+
+
+def all_events(request):
+    events_list = Event.objects.all()
+    return render(request, 'upcomingevents/events_list.html', {'events_list':events_list})
+
+
+# Create your views here.
+def index(request, year=date.today().year, month=date.today().month):
+    # usr = request.user
+    # ses = request.session
+    # paht = request.path
+    # path_info = request.path_info
+    # headers = request.headers
+    # assert False
+    announcements = [
+        {
+        'date':'6-10-2020',
+        'announcement':'Club Registration Open'
+        },
+
+        {
+            'date':'6-15-2020',
+            'announcement':'John Smith Elected new President'
+        }
+
+    ]
+
+    year = int(year)
+    month = int(month)
+
+    if year < 2000 or year > 2099:
+        year = date.today().year
+
+    month_name = calendar.month_name[month]
+    title = 'My Club Event Calendar - %s %s' % (month_name, year)
+    cal = HTMLCalendar().formatmonth(year, month)
+    # return HttpResponse('<h1>%s</h><p>%s</p>' % (title, cal))
+    return TemplateResponse(request, 'upcomingevents/index.html', {'title':title, 'cal':cal, 'announcements':announcements})
+
+def add_venue(request):
+    # assert False
+    submitted = False
+    if request.method == 'POST':
+        form = VenueForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/add_venue/?submitted=True')
+    else:
+        form = VenueForm()
+        if 'submitted' in request.GET:
+            submitted = True
+    return render(request, 'upcomingevents/add_venue.html', {'form':form, 'submitted':submitted})
+
+def list_subscribers(request):
+    p = Paginator(MyClubUser.objects.all(), 3)
+    page = request.GET.get('page')
+    subscribers = p.get_page(page)
+    return render(request, 'upcomingevents/subscribers.html', {'subscribers':subscribers})

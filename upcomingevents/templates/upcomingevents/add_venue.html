@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Add Venue{% endblock title %}
+
+{% block styles %}{{ form.media }}{% endblock styles %}
+
+
+
+{% block content %}
+    <h1>Add your venue to our database</h1>
+
+    {% if submitted %}
+        <p class="success">
+            Your venue was submitted successfully. Thank you.
+        </p>
+    {% else %}
+        <form action="" method="POST" novalidate>
+            <table>
+                {{ form.as_table }}
+                <tr>
+                    <td>&nbsp</td>
+                    <td>
+                        <input id="submit" type="submit" value="Submit">
+                    </td>
+                </tr>
+            </table>
+            {% csrf_token %}
+        </form>
+    {% endif %}
+
+{% endblock content %}
